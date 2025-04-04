@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #ffffff;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+.dark {
+  @apply bg-gray-900 text-white;
+}
+
+@layer base {
+  /* Ensure text is visible in both themes */
+  body {
+    @apply text-gray-800 bg-white;
+  }
+  
+  .dark body {
+    @apply text-gray-100 bg-gray-900;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply py-2 px-4 rounded transition-colors duration-200;
+  }
+  
+  .btn-primary {
+    @apply bg-blue-500 text-white hover:bg-blue-600;
+  }
+  
+  .btn-danger {
+    @apply bg-red-500 text-white hover:bg-red-600;
+  }
+  
+  .input {
+    @apply border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-800 dark:text-white;
+  }
+  
+  .todo-item {
+    @apply border rounded-lg p-4 mb-3 shadow-sm transition-all duration-200 bg-white dark:bg-gray-800 text-gray-800 dark:text-white;
+  }
+  
+  .todo-item:hover {
+    @apply shadow-md;
+  }
+}
