@@ -95,7 +95,3 @@ my-todo-list/
   - **TodoList**: Shows all available tasks
   - **TodoForm**: Form for adding/editing tasks
   - **ThemeToggle**: Button for switching between dark and light mode
-
-## License
-
-MIT
