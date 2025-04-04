@@ -28,7 +28,7 @@ A simple, clean, and responsive Todo List application built with React, Vite, an
 
 1. Clone the repository
    ```
-   git clone <repository-url>
+   git clone (https://github.com/isurusenarath1/My-To-Do-List.git)
    cd my-todo-list
    ```
 
