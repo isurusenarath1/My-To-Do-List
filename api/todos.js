@@ -18,7 +18,7 @@ app.use(cors({
 app.use(express.json());
 
 // Routes
-app.use('/api/todos', todoRoutes);
+app.use('/', todoRoutes);
 
 // Connect to MongoDB
 async function connectToDatabase() {
@@ -31,7 +31,11 @@ async function connectToDatabase() {
   const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/todo-app';
   
   try {
-    await mongoose.connect(mongoURI);
+    await mongoose.connect(mongoURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000 // Timeout after 5s instead of 30s
+    });
     console.log('MongoDB Connected in serverless function');
     return mongoose.connection;
   } catch (error) {

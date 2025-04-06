@@ -80,6 +80,25 @@ If the frontend loads but API requests fail:
 2. Verify that the MongoDB URI is correctly set in Vercel's environment variables
 3. Visit `/api/health` to check the API health status and database connection
 
+#### Serverless Function Connection Issue
+
+If you see "Internal Server Error" or database connection issues:
+
+1. Ensure your MongoDB Atlas allows connections from Vercel's servers:
+   - Go to MongoDB Atlas > Network Access
+   - Add "0.0.0.0/0" to your IP whitelist (temporarily for testing)
+   - Consider adding specific Vercel IP ranges for production
+
+2. Check your MONGODB_URI environment variable in Vercel:
+   - Verify it includes your username and password
+   - Ensure it specifies the correct database name
+   - Make sure any special characters in username/password are URL-encoded
+
+3. If your app works when manually started but not when deployed:
+   - Check Vercel logs for specific error messages
+   - Try deploying with `NODE_ENV=development` to see more detailed error logs
+   - Ensure MongoDB IP whitelist includes both your local machine and Vercel's servers
+
 ### Database Connection Issues
 
 If you see database connection errors:
