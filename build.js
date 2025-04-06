@@ -62,10 +62,6 @@ function createProcess(command, args, name, textColor) {
 
 async function buildApplication() {
   try {
-    // Validate MongoDB connection first
-    console.log(`${colors.yellow}Validating MongoDB connection...${colors.reset}`);
-    await createProcess('node', ['backend/test-db-connection.js'], 'MONGODB', colors.blue);
-    
     // Create the dist directory for the backend if it doesn't exist
     if (!fs.existsSync('./dist/backend')) {
       fs.mkdirSync('./dist/backend', { recursive: true });

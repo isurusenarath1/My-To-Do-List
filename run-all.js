@@ -20,42 +20,13 @@ console.log(`${colors.bright}${colors.cyan}=====================================
 
 // Check if .env file exists
 if (!fs.existsSync('.env')) {
-  console.log(`${colors.yellow}No .env file found. Setting up MongoDB connection...${colors.reset}`);
-  setupMongoDB();
+  console.log(`${colors.red}No .env file found. Create a .env file with the following content:${colors.reset}`);
+  console.log(`MONGODB_URI=mongodb+srv://<username>:<password>@tododb.cyj0ozm.mongodb.net/?retryWrites=true&w=majority&appName=todoDB`);
+  console.log(`PORT=5000`);
+  console.log(`VITE_API_URL=http://localhost:5000/api/todos`);
+  process.exit(1);
 } else {
   startApplication();
-}
-
-// Function to set up MongoDB connection
-function setupMongoDB() {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-
-  console.log(`${colors.bright}This script will set up your MongoDB Atlas connection.${colors.reset}`);
-  console.log('You\'ll need your MongoDB Atlas connection string.');
-  console.log('');
-
-  rl.question(`${colors.cyan}Enter your MongoDB Atlas password: ${colors.reset}`, (password) => {
-    // Create the MongoDB URI with the provided password
-    const mongoUri = `mongodb+srv://isurusenarath:${password}@tododb.cyj0ozm.mongodb.net/?retryWrites=true&w=majority&appName=todoDB`;
-    
-    // Create the .env file content
-    const envContent = `MONGODB_URI=${mongoUri}\nPORT=5000\nVITE_API_URL=http://localhost:5000/api/todos`;
-    
-    // Write the .env file
-    fs.writeFileSync('.env', envContent);
-    
-    console.log('');
-    console.log(`${colors.green}.env file created successfully!${colors.reset}`);
-    console.log('');
-    
-    rl.close();
-    
-    // Start the application after setup
-    startApplication();
-  });
 }
 
 // Function to create a new process
@@ -92,39 +63,27 @@ function createProcess(command, args, name, textColor) {
 
 // Function to start the application
 function startApplication() {
-  // First test the MongoDB connection
-  console.log(`${colors.yellow}Testing MongoDB connection...${colors.reset}`);
-  const testDbProcess = spawn('node', ['backend/test-db-connection.js'], { stdio: 'inherit' });
-
-  testDbProcess.on('close', (code) => {
-    if (code !== 0) {
-      console.log(`${colors.red}MongoDB connection test failed. Please check your connection settings.${colors.reset}`);
-      process.exit(1);
-    }
+  console.log(`${colors.yellow}Starting backend and frontend servers...${colors.reset}`);
+  
+  // Start the backend server
+  const backendProcess = createProcess('npm', ['run', 'server'], 'BACKEND', colors.cyan);
+  
+  // Give the backend a moment to start up before starting the frontend
+  setTimeout(() => {
+    // Start the frontend development server
+    const frontendProcess = createProcess('npm', ['run', 'dev'], 'FRONTEND', colors.magenta);
     
-    console.log(`${colors.green}MongoDB connection successful!${colors.reset}`);
-    console.log(`${colors.yellow}Starting backend and frontend servers...${colors.reset}`);
+    // Handle application termination
+    const cleanup = () => {
+      console.log(`${colors.yellow}Shutting down servers...${colors.reset}`);
+      backendProcess.kill();
+      frontendProcess.kill();
+      process.exit(0);
+    };
     
-    // Start the backend server
-    const backendProcess = createProcess('npm', ['run', 'server'], 'BACKEND', colors.cyan);
+    // Listen for termination signals
+    process.on('SIGINT', cleanup);
+    process.on('SIGTERM', cleanup);
     
-    // Give the backend a moment to start up before starting the frontend
-    setTimeout(() => {
-      // Start the frontend development server
-      const frontendProcess = createProcess('npm', ['run', 'dev'], 'FRONTEND', colors.magenta);
-      
-      // Handle application termination
-      const cleanup = () => {
-        console.log(`${colors.yellow}Shutting down servers...${colors.reset}`);
-        backendProcess.kill();
-        frontendProcess.kill();
-        process.exit(0);
-      };
-      
-      // Listen for termination signals
-      process.on('SIGINT', cleanup);
-      process.on('SIGTERM', cleanup);
-      
-    }, 2000); // 2 second delay before starting frontend
-  });
+  }, 2000); // 2 second delay before starting frontend
 } 
