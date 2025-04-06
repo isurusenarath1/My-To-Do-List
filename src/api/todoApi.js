@@ -5,7 +5,55 @@ const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/todos
 
 console.log('API base URL:', baseURL);
 
-const api = axios.create({ baseURL });
+// Create axios instance with base URL and timeout
+const api = axios.create({ 
+  baseURL,
+  timeout: 10000 // 10 seconds timeout
+});
+
+// Add a request interceptor
+api.interceptors.request.use(
+  config => {
+    // You can add any auth headers here if needed
+    return config;
+  },
+  error => {
+    console.error('Request error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// Add a response interceptor for better error handling
+api.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    if (error.code === 'ECONNABORTED') {
+      console.error('Request timeout. Server might be down.');
+      throw new Error('Connection timeout. The server is taking too long to respond.');
+    }
+    
+    if (!error.response) {
+      console.error('Network error. Server might be down or unreachable.');
+      throw new Error('Could not connect to the server. Please make sure the backend is running or try again later.');
+    }
+    
+    console.error('API error:', error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);
+
+// Check connection to API
+export const checkConnection = async () => {
+  try {
+    await api.get('/');
+    return true;
+  } catch (error) {
+    console.error('API connection check failed:', error.message);
+    return false;
+  }
+};
 
 export const getTodos = async (params = {}) => {
   try {
