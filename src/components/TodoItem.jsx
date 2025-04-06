@@ -6,6 +6,8 @@ const TodoItem = ({ todo }) => {
   const { deleteTodo, updateTodo } = useTodos();
   const [isEditing, setIsEditing] = useState(false);
   const [editedTodo, setEditedTodo] = useState({ ...todo });
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -16,9 +18,26 @@ const TodoItem = ({ todo }) => {
     setEditedTodo({ ...todo });
   };
 
-  const handleSave = () => {
-    updateTodo(todo.id, editedTodo);
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      setIsUpdating(true);
+      await updateTodo(todo._id, editedTodo);
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Failed to update todo:', error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      setIsDeleting(true);
+      await deleteTodo(todo._id);
+    } catch (error) {
+      console.error('Failed to delete todo:', error);
+      setIsDeleting(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -121,6 +140,7 @@ const TodoItem = ({ todo }) => {
             onChange={handleChange}
             className="input w-full"
             placeholder="Title"
+            disabled={isUpdating}
           />
           <textarea
             name="description"
@@ -129,19 +149,29 @@ const TodoItem = ({ todo }) => {
             className="input w-full"
             placeholder="Description"
             rows="3"
+            disabled={isUpdating}
           ></textarea>
           <input
             type="date"
             name="dueDate"
-            value={editedTodo.dueDate || ''}
+            value={editedTodo.dueDate ? editedTodo.dueDate.split('T')[0] : ''}
             onChange={handleChange}
             className="input w-full"
+            disabled={isUpdating}
           />
           <div className="flex space-x-2 mt-3">
-            <button onClick={handleSave} className="btn btn-primary">
-              Save
+            <button 
+              onClick={handleSave} 
+              className={`btn btn-primary ${isUpdating ? 'opacity-70 cursor-not-allowed' : ''}`}
+              disabled={isUpdating}
+            >
+              {isUpdating ? 'Saving...' : 'Save'}
             </button>
-            <button onClick={handleCancel} className="btn bg-gray-300 hover:bg-gray-400 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white">
+            <button 
+              onClick={handleCancel} 
+              className="btn bg-gray-300 hover:bg-gray-400 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
+              disabled={isUpdating}
+            >
               Cancel
             </button>
           </div>
@@ -170,11 +200,19 @@ const TodoItem = ({ todo }) => {
             </div>
           )}
           <div className="flex space-x-2 mt-4">
-            <button onClick={handleEdit} className="btn bg-gray-300 hover:bg-gray-400 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white">
+            <button 
+              onClick={handleEdit} 
+              className="btn bg-gray-300 hover:bg-gray-400 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
+              disabled={isDeleting}
+            >
               Edit
             </button>
-            <button onClick={() => deleteTodo(todo.id)} className="btn btn-danger">
-              Delete
+            <button 
+              onClick={handleDelete} 
+              className={`btn btn-danger ${isDeleting ? 'opacity-70 cursor-not-allowed' : ''}`}
+              disabled={isDeleting}
+            >
+              {isDeleting ? 'Deleting...' : 'Delete'}
             </button>
           </div>
         </div>

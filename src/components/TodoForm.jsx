@@ -11,6 +11,7 @@ const TodoForm = () => {
     dueDate: ''
   });
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,7 +21,7 @@ const TodoForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!todo.title.trim()) {
@@ -28,18 +29,26 @@ const TodoForm = () => {
       return;
     }
     
-    addTodo(todo);
-    
-    // Reset form
-    setTodo({
-      title: '',
-      description: '',
-      dueDate: ''
-    });
-    setError('');
-    
-    // Navigate to the task list page
-    navigate('/');
+    try {
+      setIsSubmitting(true);
+      await addTodo(todo);
+      
+      // Reset form
+      setTodo({
+        title: '',
+        description: '',
+        dueDate: ''
+      });
+      setError('');
+      
+      // Navigate to the task list page
+      navigate('/');
+    } catch (err) {
+      setError('Failed to add todo. Please try again.');
+      console.error('Error adding todo:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -56,6 +65,7 @@ const TodoForm = () => {
             onChange={handleChange}
             className="input w-full"
             placeholder="What needs to be done?"
+            disabled={isSubmitting}
           />
           {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
         </div>
@@ -71,6 +81,7 @@ const TodoForm = () => {
             className="input w-full"
             placeholder="Add some details..."
             rows="3"
+            disabled={isSubmitting}
           ></textarea>
         </div>
         
@@ -84,21 +95,24 @@ const TodoForm = () => {
             value={todo.dueDate}
             onChange={handleChange}
             className="input w-full"
+            disabled={isSubmitting}
           />
         </div>
         
         <div className="flex space-x-4">
           <button
             type="submit"
-            className="btn btn-primary flex-1"
+            className={`btn btn-primary flex-1 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+            disabled={isSubmitting}
           >
-            Add Task
+            {isSubmitting ? 'Adding...' : 'Add Task'}
           </button>
           
           <button
             type="button"
             onClick={() => navigate('/')}
             className="btn bg-gray-300 hover:bg-gray-400 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
+            disabled={isSubmitting}
           >
             Cancel
           </button>

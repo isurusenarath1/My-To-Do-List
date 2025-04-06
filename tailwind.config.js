@@ -6,7 +6,17 @@ export default {
   ],
   darkMode: 'class',
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        'pulse-x': 'pulseX 1.5s ease-in-out infinite',
+      },
+      keyframes: {
+        pulseX: {
+          '0%, 100%': { transform: 'translateX(-100%)' },
+          '50%': { transform: 'translateX(100%)' },
+        },
+      },
+    },
   },
   plugins: [],
 } 
