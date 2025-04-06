@@ -1,14 +1,11 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/todos';
+// API base URL - uses environment variable in production or localhost in development
+const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/todos';
 
-// Create axios instance
-const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
+console.log('API base URL:', baseURL);
+
+const api = axios.create({ baseURL });
 
 export const getTodos = async (params = {}) => {
   try {

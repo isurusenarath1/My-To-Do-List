@@ -12,7 +12,8 @@
     "install-server": "npm install",
     "start": "node backend/server.js",
     "dev:all": "concurrently \"npm run dev\" \"npm run server\"",
-    "test-db": "node backend/test-db-connection.js"
+    "test-db": "node backend/test-db-connection.js",
+    "vercel-build": "npm run build"
   },
   "dependencies": {
     "axios": "^1.6.10",
