@@ -71,10 +71,6 @@ npm run dev
 
 This will start the backend server on port 5000 and the frontend development server on port 5173.
 
-Windows users can also use the batch file:
-- `setup-mongodb.bat` - To configure MongoDB connection
-- `start-app.bat` - To see instructions for starting the application
-
 ### Testing MongoDB Connection
 
 To test only the MongoDB connection:
@@ -154,9 +150,7 @@ my-todo-list/
 │   │   └── todos.js     # Todo routes
 │   └── server.js        # Express server
 ├── setup.js             # MongoDB setup script (cross-platform)
-├── start.js             # Application startup script (cross-platform)
-├── setup-mongodb.bat    # MongoDB setup script (Windows)
-├── start-app.bat        # Application startup script (Windows)
+├── start.js             # Application startup guide script
 ├── index.html           # HTML entry point
 ├── .env                 # Environment variables (created by setup script)
 ├── tailwind.config.js   # Tailwind CSS configuration
