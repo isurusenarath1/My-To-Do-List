@@ -120,7 +120,20 @@ To build the application for production:
 npm run build
 ```
 
-The built files will be in the `dist` directory.
+This will:
+1. Build the frontend React application with Vite
+2. Copy the backend files to the dist directory
+3. Create a production server.js that serves both the API and frontend
+4. Create a production package.json with necessary dependencies
+
+To run the production build:
+```
+cd dist
+npm install --production
+node server.js
+```
+
+The built application will be served from a single Express server on port 5000.
 
 ## Project Structure
 
