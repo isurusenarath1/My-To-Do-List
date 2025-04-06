@@ -1,17 +1,21 @@
 // CommonJS module
 // This module uses CommonJS while the frontend uses ESM
-require('dotenv').config({ path: './.env' });
+const path = require('path');
+const dotenv = require('dotenv');
+
+// Load environment variables from root directory
+dotenv.config({ path: path.join(__dirname, '../.env') });
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const todoRoutes = require('./routes/todos');
-const path = require('path');
 const fs = require('fs');
 
-// Check if .env file exists
-if (!fs.existsSync('./.env') && fs.existsSync('../.env')) {
-  require('dotenv').config({ path: '../.env' });
-  console.log('Loaded .env from parent directory');
+// Check if .env file exists in root directory
+if (!fs.existsSync(path.join(__dirname, '../.env'))) {
+  console.log('Error: .env file not found in root directory');
+  process.exit(1);
 }
 
 const app = express();

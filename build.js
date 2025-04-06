@@ -20,7 +20,7 @@ console.log(`${colors.bright}${colors.cyan}=====================================
 // Check if .env file exists
 if (!fs.existsSync('.env')) {
   console.log(`${colors.red}Error: .env file not found${colors.reset}`);
-  console.log(`Please run "npm start" first to configure your MongoDB connection${colors.reset}`);
+  console.log(`Please ensure the .env file exists in the root directory with your MongoDB connection details${colors.reset}`);
   process.exit(1);
 }
 
@@ -81,7 +81,7 @@ async function buildApplication() {
     copyDirectoryRecursive('./backend', './dist/backend');
     
     // Copy .env file
-    fs.copyFileSync('./.env', './dist/.env');
+    fs.copyFileSync('.env', './dist/.env');
     
     // Create a production server.js in the dist folder
     createProductionServerFile();

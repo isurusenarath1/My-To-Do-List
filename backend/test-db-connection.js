@@ -12,10 +12,11 @@ console.log('MongoDB URI:', process.env.MONGODB_URI ? 'Found' : 'Missing');
 if (!process.env.MONGODB_URI) {
   console.error('ERROR: MONGODB_URI environment variable is not set');
   console.log('Please check your .env file and ensure it contains:');
-  console.log('MONGODB_URI=mongodb+srv://isurusenarath:isuru123@tododb.cyj0ozm.mongodb.net/?retryWrites=true&w=majority&appName=todoDB');
+  console.log('MONGODB_URI=mongodb+srv://<username>:<password>@tododb.cyj0ozm.mongodb.net/?retryWrites=true&w=majority&appName=todoDB');
   process.exit(1);
 }
 
+// Connect to MongoDB using the URI from environment variables
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('✅ Successfully connected to MongoDB');
