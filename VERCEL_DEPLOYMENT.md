@@ -27,7 +27,7 @@ The application is already configured to work with Vercel through:
 
 - Serverless functions in the `/api` directory that handle API requests
 - Proper directory structure for Vercel deployment
-- A `vercel.json` configuration file that routes requests correctly
+- Backend code properly set up for serverless execution
 
 ### 3. Deploying to Vercel
 
@@ -36,9 +36,9 @@ The application is already configured to work with Vercel through:
 3. From the Vercel dashboard, click "New Project"
 4. Import your GitHub repository
 5. Configure the project:
-   - **Framework Preset**: Select "Other" (the vercel.json file will handle the configuration)
-   - **Build Command**: Already configured in package.json as `npm run build`
-   - **Output Directory**: Already configured in vercel.json as `dist`
+   - **Framework Preset**: Select "Vite" 
+   - **Build Command**: `npm run build` (should be automatically detected)
+   - **Output Directory**: `dist` (should be automatically detected)
 
 ### 4. Setting Environment Variables
 
@@ -57,7 +57,7 @@ The application is already configured to work with Vercel through:
 
 1. Visit the provided URL to check if your frontend is working
 2. Test the API by making requests to endpoints like:
-   - Health check: `https://your-vercel-url.vercel.app/health`
+   - Health check: `https://your-vercel-url.vercel.app/api/health`
    - Todos API: `https://your-vercel-url.vercel.app/api/todos`
 
 ## How It Works
@@ -70,46 +70,6 @@ The deployment setup uses:
    - `api/health.js`: Provides a health check endpoint
    - `api/index.js`: Root API handler
 
-The `vercel.json` configuration file routes requests to the appropriate handlers:
-
-```json
-{
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/*.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/todos(.*)",
-      "dest": "/api/todos.js"
-    },
-    {
-      "src": "/health",
-      "dest": "/api/health.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/dist/$1",
-      "continue": true
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/dist/index.html"
-    }
-  ]
-}
-```
-
 ## Troubleshooting
 
 ### API Not Working
@@ -118,7 +78,7 @@ If the frontend loads but API requests fail:
 
 1. Check the Network tab in your browser's developer tools to see the specific error
 2. Verify that the MongoDB URI is correctly set in Vercel's environment variables
-3. Visit `/health` to check the API health status and database connection
+3. Visit `/api/health` to check the API health status and database connection
 
 ### Database Connection Issues
 
@@ -132,8 +92,8 @@ If you see database connection errors:
 
 If routes like `/active` or `/history` return a 404:
 
-1. Check that the catch-all route in `vercel.json` is properly configured
-2. Make sure you're using client-side routing (React Router) correctly
+1. Make sure you're using client-side routing (React Router) correctly
+2. In Vercel, go to Settings > General > Build & Development Settings and make sure "Rewrites" is set to "Enabled"
 
 ## Additional Resources
 

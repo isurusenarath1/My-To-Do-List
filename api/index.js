@@ -1,9 +1,6 @@
 // This file is used by Vercel as an API route
 // It simply imports and exports the Express app from the backend
 
-// Import the Express app
-const app = require('../backend/server');
-
 // Root API handler for Vercel serverless functions
 const express = require('express');
 const mongoose = require('mongoose');
