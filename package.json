@@ -5,13 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build:frontend": "vite build",
-    "build:backend": "echo Building backend...",
-    "build": "node build.js",
+    "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "server": "node backend/server.js",
-    "test-db": "node backend/test-db-connection.js",
     "start": "node run-all.js"
   },
   "dependencies": {

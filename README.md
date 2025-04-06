@@ -114,27 +114,13 @@ npm run test-db
 
 ## Build for Production
 
-To build the application for production:
+To build the frontend React application with Vite for production use:
 
 ```
 npm run build
 ```
 
-This will:
-1. Validate your MongoDB connection
-2. Build the frontend React application with Vite
-3. Copy the backend files to the dist directory
-4. Create a production server.js that serves both the API and frontend
-5. Create a production package.json with necessary dependencies
-
-To run the production build:
-```
-cd dist
-npm install --production
-node server.js
-```
-
-The built application will be served from a single Express server on port 5000.
+This will build the frontend React application with Vite for production use.
 
 ## Project Structure
 
@@ -167,9 +153,9 @@ my-todo-list/
 │   ├── routes/          # API routes
 │   │   └── todos.js     # Todo routes
 │   └── server.js        # Express server
-├── run-all.js           # All-in-one startup script (setup, backend, frontend)
+├── run-all.js           # All-in-one startup script (backend, frontend)
 ├── index.html           # HTML entry point
-├── .env                 # Environment variables (created automatically)
+├── .env                 # Environment variables
 ├── tailwind.config.js   # Tailwind CSS configuration
 ├── postcss.config.js    # PostCSS configuration
 └── vite.config.js       # Vite configuration
@@ -206,24 +192,29 @@ The backend is built with Express.js and connects to MongoDB Atlas to provide pe
 If you encounter issues:
 
 1. **MongoDB Connection Problems**:
-   - Ensure your MongoDB Atlas password is correct
+   - Ensure your MongoDB Atlas password is correct in the `.env` file
    - Check that your IP address is whitelisted in MongoDB Atlas
-   - Run `npm run test-db` to test the connection
+   - Verify the connection string format in your `.env` file
 
 2. **Application Not Starting**:
    - Check that both the frontend and backend are running
-   - Frontend runs on port 3000 by default
+   - Frontend runs on port 5173 by default (using Vite)
    - Backend runs on port 5000 by default
    - Ensure no other applications are using these ports
 
 3. **Missing Environment Variables**:
-   - If you get environment variable errors, run the setup script again
-   - Or manually create a .env file with MONGODB_URI variable
+   - Make sure your `.env` file exists in the root directory
+   - Ensure it contains the following variables:
+     ```
+     MONGODB_URI=mongodb+srv://<username>:<password>@tododb.cyj0ozm.mongodb.net/?retryWrites=true&w=majority&appName=todoDB
+     PORT=5000
+     VITE_API_URL=http://localhost:5000/api/todos
+     ```
    
 4. **Other Issues**:
    - Check the console for error messages
-   - Try restarting the application
-   - Ensure all dependencies are installed correctly
+   - Try restarting the application with `npm start`
+   - Ensure all dependencies are installed correctly with `npm install`
 
 ## License
 
