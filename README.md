@@ -46,39 +46,34 @@ A simple, clean, and responsive Todo List application built with React, Vite, Mo
    npm install
    ```
 
-3. Set up MongoDB connection
+3. Run the application
    ```
-   node setup.js
+   npm start
    ```
-   This interactive script will:
-   - Ask for your MongoDB Atlas password
-   - Create and configure the .env file
-   - Test the connection to MongoDB Atlas
+
+   On first run, you'll be prompted to:
+   - Enter your MongoDB Atlas password
+   - The application will automatically create the .env file
+   - Test the MongoDB connection
+   - Start both backend and frontend servers
 
 ### Running the Application
 
-After completing the setup, you can either:
+After initial setup, just run:
 
-**Run both backend and frontend with a single command:**
 ```
-npm run start:all
-```
-
-This will start both the backend server and frontend development server in the same terminal with color-coded output.
-
-**Or start each service separately in different terminals:**
-
-1. Start the backend server:
-```
-npm run server
+npm start
 ```
 
-2. In a separate terminal, start the frontend:
-```
-npm run dev
-```
+This will:
+1. Test your MongoDB connection (or set it up if not configured)
+2. Start the backend server (on port 5000)
+3. Start the frontend development server (on port 5173)
+4. Display color-coded logs in a single terminal
 
-This will start the backend server on port 5000 and the frontend development server on port 5173.
+The application will be available at http://localhost:5173 in your browser.
+
+**Note:** Press Ctrl+C to stop both servers when you're done.
 
 ### Testing MongoDB Connection
 
@@ -158,10 +153,9 @@ my-todo-list/
 │   ├── routes/          # API routes
 │   │   └── todos.js     # Todo routes
 │   └── server.js        # Express server
-├── setup.js             # MongoDB setup script (cross-platform)
-├── start.js             # Application startup guide script
+├── run-all.js           # All-in-one startup script (setup, backend, frontend)
 ├── index.html           # HTML entry point
-├── .env                 # Environment variables (created by setup script)
+├── .env                 # Environment variables (created automatically)
 ├── tailwind.config.js   # Tailwind CSS configuration
 ├── postcss.config.js    # PostCSS configuration
 └── vite.config.js       # Vite configuration
