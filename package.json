@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node run-all.js",
     "dev:frontend": "vite",
-    "build": "cross-env VITE_API_URL=https://todo-backend-api.onrender.com/api/todos vite build",
+    "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "server": "node backend/server.js",
