@@ -20,6 +20,18 @@ const TodoSchema = new mongoose.Schema({
   completed: {
     type: Boolean,
     default: false
+  },
+  completedAt: {
+    type: Date,
+    default: null
+  },
+  deleted: {
+    type: Boolean,
+    default: false
+  },
+  deletedAt: {
+    type: Date,
+    default: null
   }
 });
 

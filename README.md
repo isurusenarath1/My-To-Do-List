@@ -9,6 +9,8 @@ A simple, clean, and responsive Todo List application built with React, Vite, Mo
 - Dark mode / light mode toggle
 - Responsive design for all screen sizes
 - Navigation between separate pages for task management
+- Mark tasks as completed and view completed task history
+- Trash bin for deleted tasks with restoration capability
 - Data saved to MongoDB Atlas for persistence across sessions and devices
 - Color-coded due dates for better task prioritization
 
@@ -81,6 +83,35 @@ To test only the MongoDB connection:
 npm run test-db
 ```
 
+## Application Features
+
+### Task Management
+
+- **Active Tasks**: View all pending tasks sorted by due date
+- **Add Task**: Create new tasks with title, description, and due date
+- **Task History**: View completed tasks sorted by completion date
+- **Trash Bin**: View deleted tasks with options to restore or permanently delete them
+
+### Task Actions
+
+- **Mark as Done**: Complete a task, moving it to the history page
+- **Mark as Active**: Reactivate a completed task, moving it back to active tasks
+- **Edit**: Modify a task's details
+- **Delete**: Move a task to the trash bin
+- **Restore**: Recover a deleted task from the trash bin
+- **Permanently Delete**: Remove a task permanently from the trash bin
+
+### Visual Indicators
+
+- **Color-coded due dates**:
+  - Red: Tasks due within 2 days
+  - Yellow: Tasks due within 5 days
+  - Green: Tasks due in more than 5 days
+- **Status badges**:
+  - Completed tasks are marked with a "Completed" badge
+  - Deleted tasks are marked with a "Deleted" badge
+- **Timestamps**: View creation, completion, and deletion dates for each task
+
 ## Build for Production
 
 To build the application for production:
@@ -107,7 +138,9 @@ my-todo-list/
 │   │   └── Navbar.jsx   # Navigation bar component
 │   ├── pages/           # Application pages
 │   │   ├── AddTaskPage.jsx # Page for adding new tasks
-│   │   └── TaskListPage.jsx # Page for viewing tasks
+│   │   ├── TaskListPage.jsx # Page for viewing active tasks
+│   │   ├── CompletedTasksPage.jsx # Page for viewing completed tasks
+│   │   └── DeletedTasksPage.jsx # Page for viewing deleted tasks
 │   ├── context/         # React Context
 │   │   ├── ThemeContext.jsx # Dark/light mode context
 │   │   └── TodoContext.jsx  # Todo data context
@@ -137,6 +170,8 @@ my-todo-list/
 - **Pages**:
   - **Task List Page**: Displays all available tasks sorted by due date with a button to add new tasks
   - **Add Task Page**: Contains the form for creating new tasks
+  - **Completed Tasks Page**: Displays completed tasks
+  - **Deleted Tasks Page**: Displays deleted tasks
 - **Components**:
   - **TodoItem**: Displays a single task with editing/deletion capabilities
   - **TodoList**: Shows all available tasks
@@ -147,11 +182,13 @@ my-todo-list/
 
 The backend is built with Express.js and connects to MongoDB Atlas to provide persistent storage for todo items. It follows a RESTful API design with the following endpoints:
 
-- `GET /api/todos` - Get all todos
+- `GET /api/todos` - Get all todos (can filter by completed or deleted status)
 - `POST /api/todos` - Create a new todo
 - `GET /api/todos/:id` - Get a specific todo
 - `PATCH /api/todos/:id` - Update a todo
-- `DELETE /api/todos/:id` - Delete a todo
+- `DELETE /api/todos/:id` - Soft delete a todo (marks as deleted)
+- `DELETE /api/todos/:id/permanent` - Permanently delete a todo
+- `PATCH /api/todos/:id/restore` - Restore a deleted todo
 
 ## Troubleshooting
 
@@ -171,6 +208,17 @@ If you encounter issues:
    - Check browser console for API errors
    - Verify MongoDB connection is working
    - Check network tab in browser dev tools for API calls
+
+4. **Page Loading Issues**:
+   - If the Active Tasks or History pages don't load correctly, ensure the backend server is running
+   - The application includes a backend connection checker that will show an error message if the server isn't running
+   - Use `npm run dev:all` command to ensure both frontend and backend start properly
+   - If task counts appear incorrect, navigate between pages to refresh the data
+
+5. **Task Sorting Issues**:
+   - Active tasks are sorted by due date (earliest first)
+   - Completed tasks are sorted by completion date (newest first)
+   - If sorting appears incorrect, try refreshing the page
 
 ## License
 

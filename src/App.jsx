@@ -4,6 +4,8 @@ import { TodoProvider, useTodos } from './context/TodoContext';
 import Navbar from './components/Navbar';
 import TaskListPage from './pages/TaskListPage';
 import AddTaskPage from './pages/AddTaskPage';
+import CompletedTasksPage from './pages/CompletedTasksPage';
+import DeletedTasksPage from './pages/DeletedTasksPage';
 import './index.css';
 
 // Loading indicator component
@@ -13,8 +15,8 @@ const LoadingIndicator = () => {
   if (!loading) return null;
   
   return (
-    <div className="fixed top-0 left-0 right-0 h-1 bg-blue-100 overflow-hidden z-50">
-      <div className="h-full bg-blue-600 animate-pulse-x"></div>
+    <div className="fixed top-0 left-0 right-0 h-1.5 bg-blue-100 overflow-hidden z-50">
+      <div className="h-full bg-blue-600 w-full animate-pulse-x"></div>
     </div>
   );
 };
@@ -30,6 +32,8 @@ const AppContent = () => {
           <Routes>
             <Route path="/" element={<TaskListPage />} />
             <Route path="/add" element={<AddTaskPage />} />
+            <Route path="/completed" element={<CompletedTasksPage />} />
+            <Route path="/deleted" element={<DeletedTasksPage />} />
           </Routes>
         </main>
         
