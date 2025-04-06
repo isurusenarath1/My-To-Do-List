@@ -57,7 +57,16 @@ A simple, clean, and responsive Todo List application built with React, Vite, Mo
 
 ### Running the Application
 
-After completing the setup, you need to start both the backend and frontend in separate terminals:
+After completing the setup, you can either:
+
+**Run both backend and frontend with a single command:**
+```
+npm run start:all
+```
+
+This will start both the backend server and frontend development server in the same terminal with color-coded output.
+
+**Or start each service separately in different terminals:**
 
 1. Start the backend server:
 ```
