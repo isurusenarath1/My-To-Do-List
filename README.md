@@ -35,7 +35,7 @@ A simple, clean, and responsive Todo List application built with React, Vite, Mo
 
 1. Clone the repository
    ```
-   git clone <repository-url>
+   git clone https://github.com/isurusenarath1/My-To-Do-List.git
    cd my-todo-list
    ```
 
@@ -171,7 +171,3 @@ If you encounter issues:
    - Check browser console for API errors
    - Verify MongoDB connection is working
    - Check network tab in browser dev tools for API calls
-
-## License
-
-MIT
