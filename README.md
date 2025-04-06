@@ -121,10 +121,11 @@ npm run build
 ```
 
 This will:
-1. Build the frontend React application with Vite
-2. Copy the backend files to the dist directory
-3. Create a production server.js that serves both the API and frontend
-4. Create a production package.json with necessary dependencies
+1. Validate your MongoDB connection
+2. Build the frontend React application with Vite
+3. Copy the backend files to the dist directory
+4. Create a production server.js that serves both the API and frontend
+5. Create a production package.json with necessary dependencies
 
 To run the production build:
 ```
