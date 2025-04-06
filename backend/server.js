@@ -59,14 +59,12 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Start the server for local development only
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-    console.log(`MongoDB URI: ${mongoURI.replace(/mongodb\+srv:\/\/([^:]+):[^@]+@/, 'mongodb+srv://$1:****@')}`);
-    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  });
-}
+// Start the server - always start regardless of environment
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+  console.log(`MongoDB URI: ${mongoURI.replace(/mongodb\+srv:\/\/([^:]+):[^@]+@/, 'mongodb+srv://$1:****@')}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+});
 
 // Export the Express app
 module.exports = app; 

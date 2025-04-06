@@ -142,7 +142,6 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
-import todoRoutes from './backend/routes/todos.js';
 
 // Get the directory name of the current module
 const __filename = fileURLToPath(import.meta.url);
@@ -170,11 +169,209 @@ mongoose.connect(mongoURI)
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.error('MongoDB Connection Error:', err));
 
-// API routes
-app.use('/api/todos', todoRoutes);
+// Define routes directly in this file to avoid ES module/CommonJS issues
+// Create a Todo schema
+const todoSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    default: ''
+  },
+  dueDate: {
+    type: Date
+  },
+  completed: {
+    type: Boolean,
+    default: false
+  },
+  completedAt: {
+    type: Date,
+    default: null
+  },
+  deleted: {
+    type: Boolean,
+    default: false
+  },
+  deletedAt: {
+    type: Date,
+    default: null
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+// Create the Todo model
+const Todo = mongoose.model('Todo', todoSchema);
+
+// GET route to retrieve todos
+app.get('/api/todos', async (req, res) => {
+  try {
+    const { completed, deleted } = req.query;
+    
+    const filter = {};
+    
+    // Filter by completion status if specified
+    if (completed === 'true') {
+      filter.completed = true;
+    } else if (completed === 'false') {
+      filter.completed = false;
+    }
+    
+    // Filter by deleted status if specified
+    if (deleted === 'true') {
+      filter.deleted = true;
+    } else if (deleted === 'false' || deleted === undefined) {
+      filter.deleted = false;
+    }
+    
+    const todos = await Todo.find(filter).sort({ dueDate: 1 });
+    res.json(todos);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// POST route to create a new todo
+app.post('/api/todos', async (req, res) => {
+  try {
+    const { title, description, dueDate } = req.body;
+    
+    const todo = new Todo({
+      title,
+      description,
+      dueDate
+    });
+    
+    const savedTodo = await todo.save();
+    res.status(201).json(savedTodo);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// GET route to retrieve a specific todo
+app.get('/api/todos/:id', async (req, res) => {
+  try {
+    const todo = await Todo.findById(req.params.id);
+    
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    
+    res.json(todo);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// PATCH route to update a todo
+app.patch('/api/todos/:id', async (req, res) => {
+  try {
+    const updates = req.body;
+    
+    // If marking as completed, set completedAt timestamp
+    if (updates.completed === true) {
+      updates.completedAt = new Date();
+    }
+    
+    // If marking as not completed, remove completedAt timestamp
+    if (updates.completed === false) {
+      updates.completedAt = null;
+    }
+    
+    const todo = await Todo.findByIdAndUpdate(
+      req.params.id,
+      { $set: updates },
+      { new: true }
+    );
+    
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    
+    res.json(todo);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// DELETE route to soft delete a todo (mark as deleted)
+app.delete('/api/todos/:id', async (req, res) => {
+  try {
+    const todo = await Todo.findByIdAndUpdate(
+      req.params.id,
+      { 
+        $set: { 
+          deleted: true,
+          deletedAt: new Date()
+        } 
+      },
+      { new: true }
+    );
+    
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    
+    res.json({ message: 'Todo marked as deleted', todo });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// DELETE route to permanently delete a todo
+app.delete('/api/todos/:id/permanent', async (req, res) => {
+  try {
+    const todo = await Todo.findByIdAndDelete(req.params.id);
+    
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    
+    res.json({ message: 'Todo permanently deleted' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// PATCH route to restore a deleted todo
+app.patch('/api/todos/:id/restore', async (req, res) => {
+  try {
+    const todo = await Todo.findByIdAndUpdate(
+      req.params.id,
+      { 
+        $set: { 
+          deleted: false,
+          deletedAt: null
+        } 
+      },
+      { new: true }
+    );
+    
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    
+    res.json({ message: 'Todo restored', todo });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 // Serve static frontend files
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(__dirname));
 
 // For any other route, serve the index.html file
 app.get('*', (req, res) => {
