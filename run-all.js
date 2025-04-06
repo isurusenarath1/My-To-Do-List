@@ -70,8 +70,8 @@ function startApplication() {
   
   // Give the backend a moment to start up before starting the frontend
   setTimeout(() => {
-    // Start the frontend development server
-    const frontendProcess = createProcess('npm', ['run', 'dev'], 'FRONTEND', colors.magenta);
+    // Start the frontend development server using dev:frontend to avoid infinite loop
+    const frontendProcess = createProcess('npm', ['run', 'dev:frontend'], 'FRONTEND', colors.magenta);
     
     // Handle application termination
     const cleanup = () => {
