@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "backend/server.js",
+      "src": "api/*.js",
       "use": "@vercel/node"
     },
     {
@@ -15,21 +15,25 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "backend/server.js"
+      "src": "/api/todos(.*)",
+      "dest": "/api/todos.js"
     },
     {
       "src": "/health",
-      "dest": "backend/server.js"
+      "dest": "/api/health.js"
     },
     {
       "src": "/(.*)",
-      "dest": "/dist/$1"
+      "dest": "/dist/$1",
+      "continue": true
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/dist/index.html"
     }
   ],
   "env": {
-    "MONGODB_URI": "@mongodb-uri",
-    "NODE_ENV": "production",
-    "FRONTEND_URL": "${VERCEL_URL}"
+    "MONGODB_URI": "@mongodb_uri",
+    "NODE_ENV": "production"
   }
 } 

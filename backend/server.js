@@ -20,9 +20,7 @@ const PORT = process.env.PORT || 5000;
 // Configure CORS to allow requests from any origin in development
 // or from specific origins in production
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.FRONTEND_URL || '*'
-    : '*',
+  origin: '*', // Allow all origins for simplicity
   methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -53,11 +51,16 @@ app.get('/', (req, res) => {
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', message: 'Server is running' });
+  res.status(200).json({ 
+    status: 'ok', 
+    message: 'Server is running',
+    environment: process.env.NODE_ENV || 'development',
+    timestamp: new Date().toISOString()
+  });
 });
 
-// For local development, start the server directly
-if (process.env.NODE_ENV !== 'production' || process.env.VERCEL_ENV === undefined) {
+// Start the server for local development only
+if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     console.log(`MongoDB URI: ${mongoURI.replace(/mongodb\+srv:\/\/([^:]+):[^@]+@/, 'mongodb+srv://$1:****@')}`);
@@ -65,5 +68,5 @@ if (process.env.NODE_ENV !== 'production' || process.env.VERCEL_ENV === undefine
   });
 }
 
-// Export the Express app for Vercel
+// Export the Express app
 module.exports = app; 
