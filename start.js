@@ -1,5 +1,5 @@
-const { execSync } = require('child_process');
-const fs = require('fs');
+import { execSync } from 'child_process';
+import fs from 'fs';
 
 console.log('========================================');
 console.log('  Testing MongoDB Connection...');
@@ -18,15 +18,27 @@ try {
   
   console.log('');
   console.log('========================================');
-  console.log('  Starting My Todo List App...');
+  console.log('  My Todo List App - Startup Guide');
   console.log('========================================');
   console.log('');
-  
-  // Start the application
-  execSync('npm run dev:all', { stdio: 'inherit' });
+  console.log('The application needs to be started in two separate terminals:');
+  console.log('');
+  console.log('1. Start the backend server:');
+  console.log('   Open a terminal and run:');
+  console.log('   npm run server');
+  console.log('');
+  console.log('2. Start the frontend development server:');
+  console.log('   Open another terminal and run:');
+  console.log('   npm run dev');
+  console.log('');
+  console.log('Once both are running, the Todo List app will be available at:');
+  console.log('http://localhost:5173');
+  console.log('');
+  console.log('Press Ctrl+C in each terminal to stop the servers when done.');
+  console.log('');
 } catch (error) {
   console.log('');
-  console.log('Error occurred while starting the application');
+  console.log('Error occurred during MongoDB connection test');
   console.log('Please check the error message above');
   console.log('');
   process.exit(1);

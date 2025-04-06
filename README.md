@@ -57,23 +57,23 @@ A simple, clean, and responsive Todo List application built with React, Vite, Mo
 
 ### Running the Application
 
-After completing the setup, you can start the application with:
+After completing the setup, you need to start both the backend and frontend in separate terminals:
 
+1. Start the backend server:
 ```
-node start.js
-```
-
-Or using npm scripts:
-
-```
-npm run dev:all
+npm run server
 ```
 
-This will start both the backend server and the frontend development server.
+2. In a separate terminal, start the frontend:
+```
+npm run dev
+```
 
-Windows users can also use the batch files:
+This will start the backend server on port 5000 and the frontend development server on port 5173.
+
+Windows users can also use the batch file:
 - `setup-mongodb.bat` - To configure MongoDB connection
-- `start-app.bat` - To start the application
+- `start-app.bat` - To see instructions for starting the application
 
 ### Testing MongoDB Connection
 
@@ -199,30 +199,21 @@ If you encounter issues:
    - Check that your IP address is whitelisted in MongoDB Atlas
    - Run `npm run test-db` to test the connection
 
-2. **Application Won't Start**:
-   - Ensure both frontend and backend dependencies are installed
-   - Check the .env file exists with proper MongoDB URI
-   - Ensure ports 5000 and 5173 are available
+2. **Application Not Starting**:
+   - Check that both the frontend and backend are running
+   - Frontend runs on port 3000 by default
+   - Backend runs on port 5000 by default
+   - Ensure no other applications are using these ports
 
-3. **Data Not Saving**:
-   - Check browser console for API errors
-   - Verify MongoDB connection is working
-   - Check network tab in browser dev tools for API calls
-<<<<<<< HEAD
-
-4. **Page Loading Issues**:
-   - If the Active Tasks or History pages don't load correctly, ensure the backend server is running
-   - The application includes a backend connection checker that will show an error message if the server isn't running
-   - Use `npm run dev:all` command to ensure both frontend and backend start properly
-   - If task counts appear incorrect, navigate between pages to refresh the data
-
-5. **Task Sorting Issues**:
-   - Active tasks are sorted by due date (earliest first)
-   - Completed tasks are sorted by completion date (newest first)
-   - If sorting appears incorrect, try refreshing the page
+3. **Missing Environment Variables**:
+   - If you get environment variable errors, run the setup script again
+   - Or manually create a .env file with MONGODB_URI variable
+   
+4. **Other Issues**:
+   - Check the console for error messages
+   - Try restarting the application
+   - Ensure all dependencies are installed correctly
 
 ## License
 
 MIT
-=======
->>>>>>> 497736940c6adc37eb9860304d5043cbfb893508

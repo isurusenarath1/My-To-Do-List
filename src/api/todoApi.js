@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// API base URL - uses environment variable in production or localhost in development
+// API base URL - default to localhost if environment variable is not available
 const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/todos';
 
 console.log('API base URL:', baseURL);

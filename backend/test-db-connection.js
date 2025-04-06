@@ -1,5 +1,10 @@
-require('dotenv').config({ path: '../.env' });
+// CommonJS module
+const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const path = require('path');
+
+// Load environment variables from the .env file in the parent directory
+dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 console.log('Testing MongoDB Connection...');
 console.log('MongoDB URI:', process.env.MONGODB_URI ? 'Found' : 'Missing');
